@@ -3,8 +3,8 @@
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px); /* Blur mais suave */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,21 +16,30 @@
   background: white;
   width: 100%;
   max-width: 1000px;
-  height: 550px;
+  height: 600px; /* Aumentei um pouco para dar conforto */
   border-radius: 30px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+  display: flex;
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .modal-inner-content {
   display: flex;
+  width: 100%;
   height: 100%;
 }
 
+/* Lado da Imagem: Ocupa 45% */
 .modal-image-side {
-  flex: 1.2;
-  background: #eee;
+  flex: 0 0 45%; 
+  background: #f0f0f0;
 }
 
 .modal-image-side img {
@@ -39,54 +48,72 @@
   object-fit: cover;
 }
 
+/* Lado do Texto: Ocupa 55% */
 .modal-text-side {
   flex: 1;
-  padding: 50px;
+  padding: 60px;
   text-align: left;
   display: flex;
   flex-direction: column;
-  background: white;
+  overflow-y: auto; /* Permite scroll se o texto for longo */
 }
 
 .tag-ifma {
-  background: #f7fee7;
-  color: #76bc21;
-  padding: 6px 15px;
-  border-radius: 50px;
-  font-weight: bold;
-  font-size: 0.8rem;
+  background: #eef2ff;
+  color: #6366f1; /* Cor lilás/azul mais moderna */
+  padding: 6px 16px;
+  border-radius: 8px; /* Mais retangular, visual mais clean */
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   width: fit-content;
+  margin-bottom: 15px;
 }
 
 .modal-title {
-  color: #9333ea;
+  color: #1f2937; /* Cinza bem escuro, mais legível que roxo puro */
   font-size: 2.2rem;
-  margin: 20px 0;
-  line-height: 1.2;
+  margin: 0 0 20px 0;
+  line-height: 1.1;
+  font-weight: 800;
 }
 
 .modal-description-text {
-  overflow-y: auto;
   color: #4b5563;
-  line-height: 1.6;
-  font-size: 1.1rem;
+  line-height: 1.7;
+  font-size: 1.15rem;
 }
 
 .close-btn {
   position: absolute;
-  top: 20px; right: 20px;
-  width: 35px; height: 35px;
+  top: 25px; right: 25px;
+  width: 40px; height: 40px;
   border-radius: 50%;
   border: none;
-  background: white;
+  background: rgba(0,0,0,0.05);
   cursor: pointer;
-  font-size: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  font-size: 24px;
+  transition: background 0.2s;
   z-index: 10;
 }
 
-/* Responsividade básica */
+.close-btn:hover { background: rgba(0,0,0,0.1); }
+
+/* Responsividade */
 @media (max-width: 768px) {
-  .modal-inner-content { flex-direction: column; }
-  .modal-noticia { height: auto; max-height: 90vh; }
+  .modal-noticia { flex-direction: column; height: auto; max-height: 95vh; }
+  .modal-image-side { flex: 0 0 250px; }
+  .modal-text-side { padding: 30px; }
+}
+/* Ajuste para que o Banner do componente se alinhe com o layout da Home */
+.banner-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Opcional: Garante que o grid de artes não fique colado no topo */
+.grid-artes {
+  margin-top: 20px;
 }
