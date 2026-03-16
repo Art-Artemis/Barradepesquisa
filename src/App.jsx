@@ -13,13 +13,12 @@ import './App.css';
 function AppContent() {
   const location = useLocation();
 
-  // Lista de páginas que usam o HeaderContato (ou nenhum header padrão)
-  const caminhosSemHeaderPadrao = ['/contato', '/cadastro', '/login'];
+  // Adicionamos o /admin na lista de páginas sem o Header principal
+  const caminhosSemHeaderPadrao = ['/contato', '/cadastro', '/login', '/admin'];
   const esconderHeaderPadrao = caminhosSemHeaderPadrao.includes(location.pathname);
 
   return (
     <div id="root">
-      {/* Só renderiza o Header principal se não estiver em Contato, Login ou Cadastro */}
       {!esconderHeaderPadrao && <Header />}
 
       <div className="main-content-wrapper">
@@ -32,7 +31,8 @@ function AppContent() {
         </Routes>
       </div>
       
-      <Footer />
+      {/* Esconde o footer no admin se preferir um visual mais limpo */}
+      {location.pathname !== '/admin' && <Footer />}
     </div>
   );
 }

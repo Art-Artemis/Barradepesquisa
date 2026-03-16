@@ -34,11 +34,12 @@ const Cadastro = () => {
 
     setLoading(true);
 
+    // Realiza o cadastro no Auth do Supabase
     const { data, error } = await supabase.auth.signUp({
       email,
       password: senha,
       options: {
-        data: { nome },
+        data: { nome: nome }, // Metadados que o Trigger SQL vai ler
         emailRedirectTo: window.location.origin + '/login',
       },
     });
@@ -48,23 +49,20 @@ const Cadastro = () => {
     if (error) {
       if (error.message.includes('duplicate key')) {
         setErrorMsg('Esse e-mail já está cadastrado.');
-      } else if (error.message.includes('weak password')) {
-        setErrorMsg('Senha fraca. Use mais caracteres, números e símbolos.');
       } else {
         setErrorMsg(error.message);
       }
-      console.error('Erro no cadastro:', error);
     } else if (data.user) {
-      setSuccessMsg('Cadastro realizado! Verifique seu e-mail para confirmar a conta.');
+      // IMPORTANTE: Se o e-mail não chegar, lembre-se da dica de desativar "Confirm Email" no painel
+      setSuccessMsg('Cadastro solicitado! Verifique seu e-mail (e a pasta de spam) para confirmar sua conta.');
+      
+      // Limpa campos
+      setNome(''); setEmail(''); setSenha(''); setConfirmaSenha('');
+
+      // Redireciona após um tempo maior para ele ler o aviso
       setTimeout(() => {
         navigate('/login');
-      }, 3000);
-      setNome('');
-      setEmail('');
-      setSenha('');
-      setConfirmaSenha('');
-    } else {
-      setErrorMsg('Algo deu errado. Tente novamente.');
+      }, 5000);
     }
   };
 
@@ -77,120 +75,34 @@ const Cadastro = () => {
             Criar conta no Studio Besouro
           </h2>
 
-          {errorMsg && (
-            <div style={{ color: 'red', marginBottom: '15px', textAlign: 'center' }}>
-              {errorMsg}
-            </div>
-          )}
-
-          {successMsg && (
-            <div style={{ color: 'green', marginBottom: '15px', textAlign: 'center' }}>
-              {successMsg}
-            </div>
-          )}
+          {errorMsg && <div style={{ color: '#ef4444', backgroundColor: '#fee2e2', padding: '10px', borderRadius: '8px', marginBottom: '15px' }}>{errorMsg}</div>}
+          {successMsg && <div style={{ color: '#16a34a', backgroundColor: '#dcfce7', padding: '10px', borderRadius: '8px', marginBottom: '15px' }}>{successMsg}</div>}
 
           <form onSubmit={handleRegistro} className="cadastro-form">
-            <input
-              type="text"
-              placeholder="Seu Nome completo"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              required
-              disabled={loading}
-            />
+            <input type="text" placeholder="Seu Nome completo" value={nome} onChange={(e) => setNome(e.target.value)} required disabled={loading} />
+            <input type="email" placeholder="Seu melhor e-mail" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={loading} />
 
-            <input
-              type="email"
-              placeholder="Seu melhor e-mail"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={loading}
-            />
-
-            {/* Campo Senha com botão de visualizar */}
-            <div className="password-wrapper" style={{ position: 'relative' }}>
-              <input
-                type={mostrarSenha ? 'text' : 'password'}
-                placeholder="Crie uma senha (mín. 6 caracteres)"
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
-                required
-                disabled={loading}
-                style={{ width: '100%', paddingRight: '40px' }}
-              />
-              <button
-                type="button"
-                onClick={() => setMostrarSenha(!mostrarSenha)}
-                style={{
-                  position: 'absolute',
-                  right: '10px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: '1.1rem',
-                }}
-                disabled={loading}
-              >
+            <div style={{ position: 'relative' }}>
+              <input type={mostrarSenha ? 'text' : 'password'} placeholder="Crie uma senha" value={senha} onChange={(e) => setSenha(e.target.value)} required disabled={loading} style={{ width: '100%' }} />
+              <button type="button" onClick={() => setMostrarSenha(!mostrarSenha)} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer' }}>
                 {mostrarSenha ? '🙈' : '👁️'}
               </button>
             </div>
 
-            {/* Campo Confirma Senha com botão de visualizar */}
-            <div className="password-wrapper" style={{ position: 'relative' }}>
-              <input
-                type={mostrarConfirmaSenha ? 'text' : 'password'}
-                placeholder="Confirme a senha"
-                value={confirmaSenha}
-                onChange={(e) => setConfirmaSenha(e.target.value)}
-                required
-                disabled={loading}
-                style={{ width: '100%', paddingRight: '40px' }}
-              />
-              <button
-                type="button"
-                onClick={() => setMostrarConfirmaSenha(!mostrarConfirmaSenha)}
-                style={{
-                  position: 'absolute',
-                  right: '10px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: '1.1rem',
-                }}
-                disabled={loading}
-              >
+            <div style={{ position: 'relative' }}>
+              <input type={mostrarConfirmaSenha ? 'text' : 'password'} placeholder="Confirme a senha" value={confirmaSenha} onChange={(e) => setConfirmaSenha(e.target.value)} required disabled={loading} style={{ width: '100%' }} />
+              <button type="button" onClick={() => setMostrarConfirmaSenha(!mostrarConfirmaSenha)} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer' }}>
                 {mostrarConfirmaSenha ? '🙈' : '👁️'}
               </button>
             </div>
 
-            <button
-              type="submit"
-              className="help-button"
-              style={{
-                backgroundColor: '#8b5cf6',
-                color: 'white',
-                border: 'none',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                opacity: loading ? 0.7 : 1,
-              }}
-              disabled={loading}
-            >
-              {loading ? 'Cadastrando...' : 'Finalizar Cadastro'}
+            <button type="submit" className="help-button" disabled={loading} style={{ backgroundColor: '#8b5cf6', color: 'white', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', width: '100%' }}>
+              {loading ? 'Processando...' : 'Finalizar Cadastro'}
             </button>
           </form>
 
-          <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.9rem' }}>
-            <p>
-              Já tem uma conta?{' '}
-              <Link to="/login" style={{ color: '#8b5cf6', fontWeight: 'bold' }}>
-                Acesse aqui
-              </Link>
-            </p>
+          <div style={{ marginTop: '20px', textAlign: 'center' }}>
+            <p>Já tem uma conta? <Link to="/login" style={{ color: '#8b5cf6', fontWeight: 'bold' }}>Acesse aqui</Link></p>
           </div>
         </div>
       </div>

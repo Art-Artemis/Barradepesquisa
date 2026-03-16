@@ -3,81 +3,106 @@ import { supabase } from '../lib/supabaseClient';
 import './Admin.css';
 
 const Admin = () => {
-  // Estados para Obra
-  const [tituloObra, setTituloObra] = useState('');
-  const [artista, setArtista] = useState('');
-  const [preco, setPreco] = useState('');
-  const [imgObra, setImgObra] = useState('');
+  const [view, setView] = useState('menu'); // 'menu', 'banner', 'artista'
+  
+  // Estados Banner
+  const [titulo, setTitulo] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // Estados para Banner (Notícias/Destaques)
-  const [tituloBanner, setTituloBanner] = useState('');
-  const [imgBanner, setImgBanner] = useState('');
-  const [descBanner, setDescBanner] = useState(''); // Novo campo para descrição
-
-  const handleAddObra = async (e) => {
+  const handleUploadBanner = async (e) => {
     e.preventDefault();
-    const { error } = await supabase.from('obras').insert([
-      { titulo: tituloObra, artista, preco: parseFloat(preco), imagem_url: imgObra }
-    ]);
-    if (error) alert("Erro: " + error.message);
-    else {
-      alert("Obra adicionada!");
-      setTituloObra(''); setArtista(''); setPreco(''); setImgObra('');
-    }
-  };
+    if (!file) return alert("Por favor, selecione uma imagem.");
+    setLoading(true);
 
-  const handleAddBanner = async (e) => {
-    e.preventDefault();
-    const { error } = await supabase.from('banner').insert([
-      { 
-        titulo: tituloBanner, 
-        imagem_url: imgBanner, 
-        descricao: descBanner, // Enviando a descrição detalhada
-        ativo: true 
-      }
-    ]);
+    try {
+      // 1. Upload imagem para o bucket 'banners' (sem o ponto final!)
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`; // Nome simplificado
+      
+      const { error: uploadError } = await supabase.storage
+        .from('banners') 
+        .upload(fileName, file);
 
-    if (error) alert("Erro: " + error.message);
-    else {
-      alert("Destaque/Banner adicionado com sucesso!");
-      setTituloBanner(''); setImgBanner(''); setDescBanner('');
+      if (uploadError) throw uploadError;
+
+      // 2. URL pública
+      const { data: { publicUrl } } = supabase.storage
+        .from('banners')
+        .getPublicUrl(fileName);
+
+      // 3. Inserir no banco de dados
+      const { error: dbError } = await supabase.from('banner').insert({
+        titulo, 
+        descricao, 
+        imagem_url: publicUrl, 
+        categoria: 'IFMA',
+        ativo: true
+      });
+
+      if (dbError) throw dbError;
+
+      alert("Banner cadastrado com sucesso!");
+      // Resetar estados
+      setTitulo(''); setDescricao(''); setFile(null); setView('menu');
+    } catch (error) {
+      alert("Erro: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="admin-container">
-      <h1 className="admin-title">Painel de Curadoria</h1>
-      
-      <div className="admin-sections">
-        {/* Formulário de Obras */}
-        <section className="admin-card">
-          <h2>Nova Obra / Artista</h2>
-          <form onSubmit={handleAddObra} className="admin-form">
-            <input type="text" placeholder="Título da obra" value={tituloObra} onChange={e => setTituloObra(e.target.value)} required />
-            <input type="text" placeholder="Nome do artista" value={artista} onChange={e => setArtista(e.target.value)} required />
-            <input type="number" placeholder="Preço" value={preco} onChange={e => setPreco(e.target.value)} required />
-            <input type="text" placeholder="URL da imagem da obra" value={imgObra} onChange={e => setImgObra(e.target.value)} required />
-            <button type="submit" className="btn-save">Publicar Obra</button>
-          </form>
-        </section>
+      {view === 'menu' && (
+        <div className="admin-menu">
+          <h1>Painel Studio Besouro</h1>
+          <button onClick={() => setView('banner')}>Cadastrar Banner</button>
+          <button onClick={() => setView('artista')}>Criar Página de Artista</button>
+        </div>
+      )}
 
-        {/* Formulário de Banner (Notícias) */}
+      {view === 'banner' && (
         <section className="admin-card">
-          <h2>Novo Destaque (Banner)</h2>
-          <form onSubmit={handleAddBanner} className="admin-form">
-            <input type="text" placeholder="Título do Destaque" value={tituloBanner} onChange={e => setTituloBanner(e.target.value)} required />
-            <input type="text" placeholder="URL da imagem do banner" value={imgBanner} onChange={e => setImgBanner(e.target.value)} required />
-            <textarea 
-              placeholder="Descrição detalhada (aparecerá ao clicar)" 
-              value={descBanner} 
-              onChange={e => setDescBanner(e.target.value)} 
+          <form onSubmit={handleUploadBanner} className="admin-form">
+            <h2>Novo Banner (IFMA)</h2>
+            <input 
+              type="text" 
+              placeholder="Título" 
+              value={titulo}
+              onChange={e => setTitulo(e.target.value)} 
               required 
-              rows="4"
             />
-            <button type="submit" className="btn-save" style={{ backgroundColor: '#76bc21' }}>Ativar Destaque</button>
+            <input 
+              type="file" 
+              accept="image/*"
+              onChange={e => setFile(e.target.files[0])} 
+              required 
+            />
+            <textarea 
+              placeholder="Descrição" 
+              value={descricao}
+              onChange={e => setDescricao(e.target.value)} 
+              required 
+            />
+            <button type="submit" className="btn-save" disabled={loading}>
+              {loading ? 'Processando...' : 'Publicar Banner'}
+            </button>
+            <button type="button" onClick={() => setView('menu')}>Voltar ao Menu</button>
           </form>
         </section>
-      </div>
+      )}
+
+      {view === 'artista' && (
+        <section className="admin-card">
+          <div className="admin-form">
+            <h2>Configuração de Artista</h2>
+            <p>Em breve: Ferramentas para gerenciar portfólios.</p>
+            <button type="button" onClick={() => setView('menu')}>Voltar ao Menu</button>
+          </div>
+        </section>
+      )}
     </div>
   );
 };

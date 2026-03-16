@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate, Link } from 'react-router-dom';
 import HeaderContato from '../components/HeaderContato';
-import './Cadastro.css'; // Reutilizando o mesmo CSS (ou crie Login.css se preferir)
+import './Cadastro.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -20,48 +20,50 @@ const Login = () => {
     setSuccessMsg('');
     setLoading(true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password: senha,
-    });
+    try {
+      // 1. Autenticação no Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password: senha,
+      });
 
-    if (error) {
-      // Mensagens mais amigáveis
-      if (error.message.includes('Invalid login credentials')) {
-        setErrorMsg('E-mail ou senha incorretos.');
-      } else if (error.message.includes('Email not confirmed')) {
-        setErrorMsg('Confirme seu e-mail antes de entrar.');
-      } else {
-        setErrorMsg(error.message);
-      }
-      console.error('Erro no login:', error);
-      setLoading(false);
-      return;
-    }
+      if (authError) throw authError;
 
-    // Pega o user com claims (app_metadata)
-    const { data: { user } } = await supabase.auth.getUser();
+      if (authData.user) {
+        // 2. Busca o perfil na tabela 'usuario'
+        // Adicionamos um pequeno delay ou retry caso o trigger seja lento (opcional, mas seguro)
+        const { data: perfil, error: perfilError } = await supabase
+          .from('usuario')
+          .select('id_tipo_usuario')
+          .eq('id_usuario', authData.user.id)
+          .maybeSingle(); // maybeSingle não quebra se não achar de primeira
 
-    if (user) {
-      const role = user.app_metadata?.role || 'user'; // default 'user' se não tiver
+        if (perfilError) throw perfilError;
 
-      setSuccessMsg('Login realizado com sucesso!');
-      setTimeout(() => {
-        if (role === 'admin') {
-          navigate('/admin');
-        } else {
-          navigate('/');
+        if (!perfil) {
+          setErrorMsg('Perfil não encontrado. Verifique se confirmou o e-mail.');
+          setLoading(false);
+          return;
         }
-      }, 1500); // Pequeno delay para ver a mensagem
 
-      // Limpa campos
-      setEmail('');
-      setSenha('');
-    } else {
-      setErrorMsg('Usuário não encontrado após login.');
+        // 3. Verificação do ID
+        setSuccessMsg('Acesso autorizado! Redirecionando...');
+
+        setTimeout(() => {
+          // No banco: 1 = Admin, 2 = Comum
+          if (Number(perfil.id_tipo_usuario) === 1) {
+            navigate('/admin');
+          } else {
+            navigate('/');
+          }
+        }, 1000);
+      }
+    } catch (error) {
+      console.error('Erro no login:', error);
+      setErrorMsg(error.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos.' : error.message);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -74,13 +76,13 @@ const Login = () => {
           </h2>
 
           {errorMsg && (
-            <div style={{ color: 'red', marginBottom: '15px', textAlign: 'center' }}>
+            <div style={{ color: '#ef4444', backgroundColor: '#fee2e2', padding: '10px', borderRadius: '8px', marginBottom: '15px', textAlign: 'center' }}>
               {errorMsg}
             </div>
           )}
 
           {successMsg && (
-            <div style={{ color: 'green', marginBottom: '15px', textAlign: 'center' }}>
+            <div style={{ color: '#16a34a', backgroundColor: '#dcfce7', padding: '10px', borderRadius: '8px', marginBottom: '15px', textAlign: 'center' }}>
               {successMsg}
             </div>
           )}
@@ -95,7 +97,6 @@ const Login = () => {
               disabled={loading}
             />
 
-            {/* Campo Senha com visualizar */}
             <div className="password-wrapper" style={{ position: 'relative' }}>
               <input
                 type={mostrarSenha ? 'text' : 'password'}
@@ -119,7 +120,6 @@ const Login = () => {
                   cursor: 'pointer',
                   fontSize: '1.1rem',
                 }}
-                disabled={loading}
               >
                 {mostrarSenha ? '🙈' : '👁️'}
               </button>
@@ -135,6 +135,7 @@ const Login = () => {
                 border: 'none',
                 cursor: loading ? 'not-allowed' : 'pointer',
                 opacity: loading ? 0.7 : 1,
+                width: '100%'
               }}
             >
               {loading ? 'Entrando...' : 'Entrar'}

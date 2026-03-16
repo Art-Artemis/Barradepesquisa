@@ -1,55 +1,108 @@
+/* Admin.css - Estilo Profissional e Alinhado com a Home */
 .admin-container {
-  padding: 40px;
-  background-color: #fdfdf5;
-  min-height: 80vh;
+  padding: 40px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
 }
 
 .admin-title {
-  color: #8b5cf6;
   text-align: center;
+  font-size: 2rem;
   margin-bottom: 40px;
-  font-family: sans-serif;
+  color: #1a1a1a;
 }
 
-.admin-sections {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  max-width: 1200px;
+/* Sistema de Menu */
+.admin-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
   margin: 0 auto;
 }
 
-.admin-card {
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  border-top: 5px solid #84cc16;
+.admin-menu button {
+  padding: 15px;
+  font-size: 1.1rem;
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
+.admin-menu button:hover {
+  background: #7c3aed;
+}
+
+/* Cartões de formulário */
+.admin-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+}
+
+.admin-card h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #444;
+}
+
+/* Formulários */
 .admin-form {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.admin-form input {
+.admin-form input, 
+.admin-form textarea, 
+.admin-form select {
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box; /* Garante que padding não quebre o layout */
+}
+
+.admin-form textarea {
+  resize: vertical;
+  min-height: 100px;
 }
 
 .btn-save {
-  background: #8b5cf6;
+  padding: 14px;
+  background: #16a34a;
   color: white;
   border: none;
-  padding: 12px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.3s;
 }
 
 .btn-save:hover {
-  background: #7c3aed;
+  background: #15803d;
+}
+
+.admin-form button[type="button"] {
+  background: #666;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .admin-container { padding: 20px 10px; }
+  .admin-sections { grid-template-columns: 1fr; }
 }
