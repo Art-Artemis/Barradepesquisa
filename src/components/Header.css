@@ -95,3 +95,11 @@
   .search-container { width: 100%; margin: 0; order: 2; }
   .contact-button { width: 100%; order: 3; padding: 10px; }
 }
+.logo-container.clickable {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.logo-container.clickable:hover {
+  opacity: 0.8; /* Efeito visual leve ao passar o mouse */
+}

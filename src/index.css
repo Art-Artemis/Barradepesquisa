@@ -1,75 +1,59 @@
-/* src/index.css */
-@import url('https://fonts.googleapis.com/css2?family=Adigiana+Toybox&display=swap'); /* Exemplo Google Fonts */
-/* OU configure o @font-face se for um arquivo local .ttf/.otf */
+/* Importação de Fonte - Certifique-se de que o nome está correto no Google Fonts */
+/* Se a Adigiana não carregar, o sistema usará a 'sans-serif' definida no body */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap'); 
 
-/* Seu restante do código global que já tínhamos feito: */
+/* Reset Global Único */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-/* ... resto do seu CSS global ... */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box; /* Garante que larguras de 100% funcionem com padding */
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  background-color: white; /* Fundo branco para o resto da página */
-  font-family: sans-serif;
-  color: black;
-  
-  /* Ajustes para o Header ocupar 100% */
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 100vh;
-}
-
-/* O container da Home também deve ocupar a largura total */
-.home-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-main {
-  /* Centralizamos apenas o conteúdo interno do main, não o Header */
-  text-align: center; 
-  margin-top: 40px;
-  padding: 0 20px; /* Margem de segurança nas laterais para o texto */
-}
-/* src/App.css ou src/index.css */
 
 html, body {
   height: 100%;
-  margin: 0;
+  width: 100%;
+  overflow-x: hidden; /* Evita barra de rolagem horizontal indesejada */
 }
 
+body {
+  background-color: #ffffff;
+  font-family: 'Inter', sans-serif; /* Fonte legível como fallback */
+  color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Estrutura do React Root */
 #root {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Altura mínima de 100% da tela */
+  flex: 1;
 }
 
+/* Container Principal da Home */
 .home-container {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  flex: 1; /* Faz o container ocupar todo o espaço restante */
+  flex: 1;
 }
-/* ... seu código existente ... */
 
-/* --- RESPONSIVIDADE PARA CELULAR (Ajustes Globais) --- */
+
+/* --- RESPONSIVIDADE --- */
 @media (max-width: 768px) {
   main {
-    margin-top: 20px; /* Diminui o espaçamento no topo para celulares */
-    padding: 0 15px;  /* Reduz um pouco a margem lateral */
+    margin-top: 20px;
+    padding: 0 15px;
   }
 
   h1 {
-    font-size: 1.5rem; /* Ajusta o tamanho do título para caber na tela */
+    font-size: 1.5rem;
+  }
+  
+  /* Garante que imagens e cards não estourem a tela no mobile */
+  img {
+    max-width: 100%;
+    height: auto;
   }
 }

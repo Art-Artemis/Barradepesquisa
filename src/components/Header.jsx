@@ -1,16 +1,19 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Importando para o botão funcionar
+import { useNavigate } from 'react-router-dom';
 import './Header.css';
 import { FiSearch, FiMail } from 'react-icons/fi';
 import logo from '../assets/logo.png'; 
 
 const Header = () => {
-  const navigate = useNavigate(); // Inicializando a navegação
+  const navigate = useNavigate();
 
   return (
     <header className="main-header">
-      {/* Lado Esquerdo: Logo (Estática agora) */}
-      <div className="logo-container">
+      {/* Lado Esquerdo: Logo (Agora com clique para Login) */}
+      <div 
+        className="logo-container clickable" 
+        onClick={() => navigate('/login')} // Redireciona para a página de Login
+      >
         <img src={logo} alt="Studio Besouro Logo" className="logo-icon" />
         <span className="logo-text">
           <span className="text-green">Studio</span> <span className="text-purple">Besouro</span>
@@ -27,10 +30,10 @@ const Header = () => {
         />
       </div>
 
-      {/* Lado Direito: Botão de Contato (Funcional novamente) */}
+      {/* Lado Direito: Botão de Contato */}
       <button 
         className="contact-button" 
-        onClick={() => navigate('/contato')} // Leva para a página de contato
+        onClick={() => navigate('/contato')}
       >
         <FiMail className="mail-icon" />
         <span>Contato Curadoria</span>

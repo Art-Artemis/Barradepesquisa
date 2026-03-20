@@ -9,33 +9,46 @@ const Home = () => {
   const [categoriaAtiva, setCategoriaAtiva] = useState('Todas');
   const [obraSelecionada, setObraSelecionada] = useState(null);
 
+  // Categorias fixas conforme seu pedido (Sem emojis)
+  const categoriasFixas = [
+    'Todas', 
+    'Desenho', 
+    'Pintura', 
+    'Música', 
+    'Literatura', 
+    'Fotografia', 
+    'Escultura'
+  ];
+
   useEffect(() => {
     fetchDados();
   }, []);
 
   const fetchDados = async () => {
+    // Busca Banners ativos
     const { data: bData } = await supabase.from('banner').select('*').eq('ativo', true);
     if (bData) setBanners(bData);
 
+    // Busca Obras
     const { data: oData } = await supabase.from('obras').select('*');
     if (oData) setObras(oData);
   };
 
-  const categorias = ['Todas', ...new Set(obras.map(o => o.categoria))];
+  // Lógica de Filtro: Comparação exata de strings
   const obrasFiltradas = categoriaAtiva === 'Todas' 
     ? obras 
     : obras.filter(o => o.categoria === categoriaAtiva);
 
   return (
     <div className="home-content">
-      {/* Banner */}
+      {/* 1. Seção do Banner */}
       <section className="banner-section">
         {banners.length > 0 && <Banner noticias={banners} />}
       </section>
 
-      {/* Categorias */}
+      {/* 2. Barra de Categorias (Nav) */}
       <nav className="nav-categories">
-        {categorias.map(cat => (
+        {categoriasFixas.map(cat => (
           <button 
             key={cat} 
             className={`category-pill ${categoriaAtiva === cat ? 'active' : ''}`}
@@ -46,21 +59,30 @@ const Home = () => {
         ))}
       </nav>
 
-      {/* Galeria de Obras */}
+      {/* 3. Grid de Obras */}
       <main className="grid-artes">
-        {obrasFiltradas.map((obra) => (
-          <div key={obra.id_obra} className="card-arte" onClick={() => setObraSelecionada(obra)}>
-            <img src={obra.imagem_url} alt={obra.titulo} className="card-image" />
-            <div className="card-body">
-              <h4>{obra.titulo}</h4>
-              <p className="artist-label">Por: {obra.artista}</p>
-              <div className="type-tag">{obra.preco ? `R$ ${obra.preco}` : 'Sob consulta'}</div>
+        {obrasFiltradas.length > 0 ? (
+          obrasFiltradas.map((obra) => (
+            <div key={obra.id_obra} className="card-arte" onClick={() => setObraSelecionada(obra)}>
+              <div className="card-image-wrapper">
+                <img src={obra.imagem_url} alt={obra.titulo} className="card-image" />
+              </div>
+              <div className="card-body">
+                <h4 className="obra-titulo">{obra.titulo}</h4>
+                <p className="artist-label">por <span className="artist-name">{obra.artista}</span></p>
+                <div className="card-footer-info">
+                   <span className="type-tag">{obra.categoria}</span>
+                   <span className="price-tag">{obra.preco ? `R$ ${obra.preco}` : 'Sob consulta'}</span>
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <div className="no-results">Nenhuma obra cadastrada em "{categoriaAtiva}".</div>
+        )}
       </main>
 
-      {/* Modal de Detalhes da Obra */}
+      {/* 4. Modal de Detalhes Estilo Vitrine */}
       {obraSelecionada && (
         <div className="modal-overlay" onClick={() => setObraSelecionada(null)}>
           <div className="modal-noticia" onClick={e => e.stopPropagation()}>
@@ -70,10 +92,11 @@ const Home = () => {
                 <img src={obraSelecionada.imagem_url} alt={obraSelecionada.titulo} />
               </div>
               <div className="modal-text-side">
-                <span className="tag-ifma">{obraSelecionada.categoria}</span>
+                <span className="tag-category-modal">{obraSelecionada.categoria}</span>
                 <h1 className="modal-title">{obraSelecionada.titulo}</h1>
+                <p className="modal-artist">Artista: {obraSelecionada.artista}</p>
                 <div className="modal-description-text">
-                  <p>{obraSelecionada.descricao || "Sem descrição disponível."}</p>
+                  <p>{obraSelecionada.descricao || "Sem descrição disponível para esta obra."}</p>
                 </div>
               </div>
             </div>

@@ -1,18 +1,22 @@
-/* src/App.css ou src/index.css */
-
-html, body {
-  height: 100%;
-  margin: 0;
-}
+/* src/App.css */
 
 #root {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Altura mínima de 100% da tela */
+  min-height: 100vh;
 }
 
-.home-container {
+/* ESTA É A REGRA QUE FALTA */
+.main-header {
+  flex-shrink: 0; /* Impede o header de ser esmagado pelo flexbox */
+  width: 100%;
+  position: sticky; /* Opcional: faz o header fixar no topo ao rolar */
+  top: 0;
+  z-index: 1000;
+}
+
+.main-content-wrapper {
+  flex: 1 0 auto; /* Garante que o conteúdo cresça e empurre o footer */
   display: flex;
   flex-direction: column;
-  flex: 1; /* Faz o container ocupar todo o espaço restante */
 }

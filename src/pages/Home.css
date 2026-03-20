@@ -1,119 +1,86 @@
-/* --- ESTILO DO MODAL (ESTILO NOTÍCIA) --- */
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px); /* Blur mais suave */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-  padding: 20px;
-}
-
-.modal-noticia {
-  background: white;
+/* --- CONTAINER E GRID --- */
+.home-content {
   width: 100%;
-  max-width: 1000px;
-  height: 600px; /* Aumentei um pouco para dar conforto */
-  border-radius: 30px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-  display: flex;
-  animation: modalFadeIn 0.3s ease;
+  background-color: #fdfdf5; /* Cor de fundo suave */
 }
 
-@keyframes modalFadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.modal-inner-content {
-  display: flex;
-  width: 100%;
-  height: 100%;
-}
-
-/* Lado da Imagem: Ocupa 45% */
-.modal-image-side {
-  flex: 0 0 45%; 
-  background: #f0f0f0;
-}
-
-.modal-image-side img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Lado do Texto: Ocupa 55% */
-.modal-text-side {
-  flex: 1;
-  padding: 60px;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto; /* Permite scroll se o texto for longo */
-}
-
-.tag-ifma {
-  background: #eef2ff;
-  color: #6366f1; /* Cor lilás/azul mais moderna */
-  padding: 6px 16px;
-  border-radius: 8px; /* Mais retangular, visual mais clean */
-  font-weight: 600;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  width: fit-content;
-  margin-bottom: 15px;
-}
-
-.modal-title {
-  color: #1f2937; /* Cinza bem escuro, mais legível que roxo puro */
-  font-size: 2.2rem;
-  margin: 0 0 20px 0;
-  line-height: 1.1;
-  font-weight: 800;
-}
-
-.modal-description-text {
-  color: #4b5563;
-  line-height: 1.7;
-  font-size: 1.15rem;
-}
-
-.close-btn {
-  position: absolute;
-  top: 25px; right: 25px;
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(0,0,0,0.05);
-  cursor: pointer;
-  font-size: 24px;
-  transition: background 0.2s;
-  z-index: 10;
-}
-
-.close-btn:hover { background: rgba(0,0,0,0.1); }
-
-/* Responsividade */
-@media (max-width: 768px) {
-  .modal-noticia { flex-direction: column; height: auto; max-height: 95vh; }
-  .modal-image-side { flex: 0 0 250px; }
-  .modal-text-side { padding: 30px; }
-}
-/* Ajuste para que o Banner do componente se alinhe com o layout da Home */
-.banner-section {
-  width: 100%;
-  max-width: 1200px;
+.grid-artes {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+  gap: 30px !important;
+  padding: 40px 5% 100px !important;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
-/* Opcional: Garante que o grid de artes não fique colado no topo */
-.grid-artes {
-  margin-top: 20px;
+/* --- BARRA DE CATEGORIAS --- */
+.nav-categories {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  padding: 30px 20px !important;
+  flex-wrap: wrap !important;
+}
+
+/* ESTILO DAS PILLS (BOTÕES) */
+.category-pill {
+  all: unset !important; /* Reseta estilos padrão de botão */
+  padding: 10px 25px !important;
+  border-radius: 50px !important;
+  border: 1px solid #d4ed91 !important;
+  background-color: #ffffff !important;
+  color: #65a30d !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* BOTÃO ATIVO (VERDE BESOURO) */
+.category-pill.active {
+  background-color: #84cc16 !important;
+  color: #ffffff !important;
+  border-color: #84cc16 !important;
+  box-shadow: 0 4px 15px rgba(132, 204, 22, 0.4) !important;
+}
+
+.category-pill:hover:not(.active) {
+  background-color: #f7fee7 !important;
+  transform: translateY(-2px) !important;
+}
+
+/* --- CARD DE OBRA --- */
+.card-arte {
+  background: white !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05) !important;
+  cursor: pointer !important;
+  transition: transform 0.3s ease !important;
+  text-align: left !important;
+}
+
+.card-arte:hover {
+  transform: translateY(-10px) !important;
+}
+
+.card-image {
+  width: 100% !important;
+  height: 250px !important;
+  object-fit: cover !important;
+}
+
+.card-body {
+  padding: 20px !important;
+}
+
+.obra-titulo {
+  font-size: 1.2rem !important;
+  font-weight: 800 !important;
+  color: #111827 !important;
+  margin-bottom: 5px !important;
 }

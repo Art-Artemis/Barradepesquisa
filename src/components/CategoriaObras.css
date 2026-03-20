@@ -1,0 +1,57 @@
+.feed-container {
+  padding: 40px 5%;
+  background-color: #fdfdf5; /* Tom amarelado bem claro do fundo */
+}
+
+.categorias-bar {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+}
+
+.cat-button {
+  padding: 10px 25px;
+  border-radius: 50px;
+  border: 1px solid #d4ed91;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.cat-button.active {
+  background-color: #84cc16; /* Verde da imagem */
+  color: white;
+  border-color: #84cc16;
+}
+
+.obras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.obra-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  transition: transform 0.3s;
+}
+
+.obra-card:hover {
+  transform: translateY(-10px);
+}
+
+.tag-categoria {
+  background: #f0fdf4;
+  color: #16a34a;
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+}

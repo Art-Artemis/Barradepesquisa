@@ -1,0 +1,36 @@
+import React, { useState } from 'react';
+import './CategoriaObras.css';
+
+const CategoriaObras = () => {
+  // Estado para controlar qual categoria está selecionada
+  const [categoriaAtiva, setCategoriaAtiva] = useState('Todas');
+
+  // Lista exata das suas categorias
+  const categorias = [
+    'Todas',
+    'Desenho',
+    'Pintura',
+    'Música',
+    'Literatura',
+    'Fotografia',
+    'Escultura'
+  ];
+
+  return (
+    <section className="categorias-container">
+      <div className="categorias-wrapper">
+        {categorias.map((cat) => (
+          <button
+            key={cat}
+            className={`categoria-btn ${categoriaAtiva === cat ? 'active' : ''}`}
+            onClick={() => setCategoriaAtiva(cat)}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export default CategoriaObras;
