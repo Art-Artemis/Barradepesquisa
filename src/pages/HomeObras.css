@@ -1,6 +1,3 @@
-/* ────────────────────────────────────────────────
-   CONTAINER E TÍTULO
-───────────────────────────────────────────────── */
 .home-obras-section {
   max-width: 1300px;
   margin: 60px auto;
@@ -17,7 +14,7 @@
 }
 
 /* ────────────────────────────────────────────────
-   FILTROS DE CATEGORIA (ESTILO STUDIO BESOURO)
+   FILTROS - SEÇÃO ATUALIZADA
 ───────────────────────────────────────────────── */
 .categorias-filtro {
   display: flex;
@@ -31,9 +28,9 @@
   all: unset;
   padding: 12px 28px;
   border-radius: 50px;
-  border: 1px solid #d4ed91; /* Borda verde clara fina */
+  border: 1px solid #d4ed91; /* Borda verde clara */
   background: white;
-  color: #65a30d; /* Verde oliva */
+  color: #65a30d; /* Texto verde oliva */
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
@@ -43,9 +40,8 @@
   justify-content: center;
 }
 
-/* Botão Ativo (Verde vibrante com sombra) */
 .categoria-btn.ativa {
-  background: #84cc16; 
+  background: #84cc16; /* Verde vibrante */
   color: white;
   border-color: #84cc16;
   box-shadow: 0 4px 15px rgba(132, 204, 22, 0.4);
@@ -58,7 +54,7 @@
 }
 
 /* ────────────────────────────────────────────────
-   GRID E CARDS (PÁGINA INICIAL)
+   GRID - SEM ALTERAÇÕES
 ───────────────────────────────────────────────── */
 .obras-grid {
   display: grid;
@@ -89,21 +85,19 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.obra-card:hover .obra-imagem img {
+  transform: scale(1.05);
 }
 
 .obra-info {
   padding: 20px;
 }
 
-.obra-titulo-card {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 5px;
-}
-
 /* ────────────────────────────────────────────────
-   MODAL - DESIGN IDENTICO À IMAGEM
+   MODAL - SEM ALTERAÇÕES
 ───────────────────────────────────────────────── */
 .modal-overlay {
   position: fixed;
@@ -150,6 +144,11 @@
   transition: all 0.2s;
 }
 
+.close-btn:hover {
+  background: #f1f5f9;
+  transform: scale(1.1);
+}
+
 .modal-inner-content {
   display: flex;
   width: 100%;
@@ -159,6 +158,8 @@
 .modal-image-side {
   flex: 1.3;
   background: #f8fafc;
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -168,7 +169,17 @@
 .modal-image-side img {
   max-width: 100%;
   max-height: 100%;
+  width: auto;
+  height: auto;
   object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.modal-image-side.cover img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 .modal-text-side {
@@ -177,16 +188,16 @@
   background: #ffffff;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: left;
+  overflow-y: auto;
 }
 
 .modal-title {
   font-size: 2.8rem;
   font-weight: 500;
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   letter-spacing: -1px;
-  /* Degradê Verde para Roxo */
   background: linear-gradient(90deg, #a3e635, #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -194,20 +205,20 @@
 
 .modal-artist {
   font-size: 1.2rem;
-  color: #a3e635; /* Verde limão da imagem */
-  margin: 0 0 20px 0;
+  color: #a3e635;
+  margin: 0 0 25px 0;
   font-weight: 400;
 }
 
 .tag-category-modal {
   align-self: flex-start;
-  background: #ecfccb; /* Verde clarinho de fundo */
-  color: #65a30d; /* Texto verde oliva */
+  background: #ecfccb;
+  color: #65a30d;
   padding: 6px 18px;
   border-radius: 20px;
   font-size: 0.95rem;
   font-weight: 500;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 
 .modal-description-text {
@@ -217,10 +228,27 @@
   font-weight: 300;
 }
 
-/* RESPONSIVIDADE */
 @media (max-width: 900px) {
-  .modal-noticia { flex-direction: column; }
-  .modal-image-side { min-height: 300px; height: 40vh; }
-  .modal-text-side { padding: 30px; }
-  .modal-title { font-size: 2.2rem; }
+  .modal-noticia {
+    flex-direction: column;
+    max-height: 95vh;
+  }
+  
+  .modal-image-side {
+    height: 40vh;
+    min-height: 300px;
+  }
+  
+  .modal-text-side {
+    padding: 40px 30px;
+  }
+  
+  .modal-title {
+    font-size: 2.2rem;
+  }
+  
+  .close-btn {
+    top: 12px;
+    right: 12px;
+  }
 }
