@@ -84,3 +84,109 @@
   color: #111827 !important;
   margin-bottom: 5px !important;
 }
+
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.home-title {
+  text-align: center;
+  font-size: 2.8rem;
+  margin-bottom: 40px;
+  color: #1e293b;
+}
+
+.obras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 32px;
+}
+
+.obra-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.obra-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+.obra-imagem img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+}
+
+.obra-info {
+  padding: 20px;
+}
+
+.obra-titulo {
+  font-size: 1.35rem;
+  margin: 0 0 12px;
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.obra-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.obra-artista {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.obra-categoria {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+}
+
+/* Cores por categoria - ajuste conforme quiser */
+.categoria-desenho     { background: #3b82f6; }
+.categoria-pintura     { background: #ef4444; }
+.categoria-música      { background: #8b5cf6; }
+.categoria-literatura  { background: #f59e0b; }
+.categoria-fotografia  { background: #10b981; }
+.categoria-escultura   { background: #ec4899; }
+
+.obra-descricao {
+  color: #475569;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.btn-ver-mais {
+  display: inline-block;
+  color: #7c3aed;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.btn-ver-mais:hover {
+  color: #5b21b6;
+  text-decoration: underline;
+}
+
+.loading, .error, .no-obras {
+  text-align: center;
+  font-size: 1.3rem;
+  padding: 60px 20px;
+  color: #64748b;
+}
+
+.error { color: #ef4444; }

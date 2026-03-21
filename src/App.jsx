@@ -1,35 +1,42 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+
+// 1. Importação dos Componentes de Layout
 import Header from './components/Header';
 import Footer from './components/Footer';
+
+// 2. Importação das Páginas
 import Home from './pages/Home';
 import Contato from './pages/Contato'; 
 import Cadastro from './pages/Cadastro'; 
 import Login from './pages/Login';
 import Admin from './pages/Admin';
 import PaginaArtista from './pages/PaginaArtista';
+
+// 3. Estilos
 import './App.css';
 
 function AppContent() {
   const location = useLocation();
+  const rotaAtual = location.pathname.toLowerCase().replace(/\/$/, "") || "/";
 
-  // Verificação para rotas dinâmicas (ex: /artista/1)
-  const isPaginaArtista = location.pathname.startsWith('/artista/');
+  // --- LÓGICA DO HEADER ---
+  // Escondemos o Header padrão no Login, Cadastro, Admin, Artista e agora no Contato (pois o Contato tem o seu próprio)
+  const rotasSemHeader = ['/login', '/cadastro', '/admin', '/contato'];
+  const isArtista = rotaAtual.startsWith('/artista');
+  
+  const esconderHeader = rotasSemHeader.includes(rotaAtual) || isArtista;
 
-  // 1. CORREÇÃO: Preenchi a variável que estava faltando/vazia no seu código
-  const caminhosSemHeaderPadrao = [
-    '/login', 
-    '/cadastro', 
-    '/admin'
-  ];
-
-  // 2. Lógica de decisão: Esconde se estiver na lista OU se for página de artista
-  const esconderHeaderPadrao = caminhosSemHeaderPadrao.includes(location.pathname) || isPaginaArtista;
+  // --- LÓGICA DO FOOTER ---
+  // Aqui deixamos o Footer aparecer em quase tudo. 
+  // Ele só vai sumir no Admin ou se você estiver na página de um Artista.
+  const rotasSemFooter = ['/admin']; 
+  const esconderFooter = rotasSemFooter.includes(rotaAtual) || isArtista;
 
   return (
     <div id="root">
-      {/* O Header só renderiza se esconderHeaderPadrao for falso */}
-      {!esconderHeaderPadrao && <Header />}
+      {/* Header condicional */}
+      {!esconderHeader && <Header />}
 
       <div className="main-content-wrapper">
         <Routes>
@@ -42,8 +49,8 @@ function AppContent() {
         </Routes>
       </div>
       
-      {/* O Footer segue a mesma lógica para manter a consistência visual */}
-      {!esconderHeaderPadrao && <Footer />}
+      {/* Footer condicional (Agora visível no Contato/Home/Login/Cadastro) */}
+      {!esconderFooter && <Footer />}
     </div>
   );
 }
