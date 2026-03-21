@@ -1,3 +1,6 @@
+/* ────────────────────────────────────────────────
+   CONTAINER E TÍTULO
+───────────────────────────────────────────────── */
 .home-obras-section {
   max-width: 1300px;
   margin: 60px auto;
@@ -13,34 +16,50 @@
   color: #1e293b;
 }
 
-/* Filtros */
+/* ────────────────────────────────────────────────
+   FILTROS DE CATEGORIA (ESTILO STUDIO BESOURO)
+───────────────────────────────────────────────── */
 .categorias-filtro {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 15px;
   justify-content: center;
   margin-bottom: 50px;
 }
 
 .categoria-btn {
-  padding: 10px 24px;
+  all: unset;
+  padding: 12px 28px;
   border-radius: 50px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #d4ed91; /* Borda verde clara fina */
   background: white;
+  color: #65a30d; /* Verde oliva */
   font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  color: #64748b;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.categoria-btn.ativa,
-.categoria-btn:hover {
-  background: #10b981;
+/* Botão Ativo (Verde vibrante com sombra) */
+.categoria-btn.ativa {
+  background: #84cc16; 
   color: white;
-  border-color: #10b981;
+  border-color: #84cc16;
+  box-shadow: 0 4px 15px rgba(132, 204, 22, 0.4);
 }
 
-/* Grid */
+.categoria-btn:hover:not(.ativa) {
+  background: #f7fee7;
+  border-color: #bef264;
+  transform: translateY(-2px);
+}
+
+/* ────────────────────────────────────────────────
+   GRID E CARDS (PÁGINA INICIAL)
+───────────────────────────────────────────────── */
 .obras-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -70,21 +89,22 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.obra-card:hover .obra-imagem img {
-  transform: scale(1.05);
 }
 
 .obra-info {
   padding: 20px;
 }
 
-/* ────────────────────────────────────────────────
-   MODAL - IMAGEM AJUSTADA INDEPENDENTE DO TAMANHO
-───────────────────────────────────────────────── */
+.obra-titulo-card {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 5px;
+}
 
+/* ────────────────────────────────────────────────
+   MODAL - DESIGN IDENTICO À IMAGEM
+───────────────────────────────────────────────── */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -113,7 +133,7 @@
 .close-btn {
   position: absolute;
   top: 15px;
-  right: 15px;           /* Ajustado para ficar sempre no canto direito superior */
+  right: 15px;
   background: white;
   color: #94a3b8;
   border: none;
@@ -130,12 +150,6 @@
   transition: all 0.2s;
 }
 
-.close-btn:hover {
-  background: #f1f5f9;
-  transform: scale(1.1);
-}
-
-/* Layout do Modal */
 .modal-inner-content {
   display: flex;
   width: 100%;
@@ -144,30 +158,17 @@
 
 .modal-image-side {
   flex: 1.3;
-  background: #f8fafc;          /* Fundo neutro para imagens menores */
-  position: relative;
-  overflow: hidden;
+  background: #f8fafc;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 500px;            /* Garante espaço mínimo */
+  min-height: 500px;
 }
 
 .modal-image-side img {
   max-width: 100%;
   max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;          /* ← Principal: mantém proporção sem distorcer */
-  object-position: center;
-  display: block;
-}
-
-/* Alternativa: se quiser que preencha todo o espaço (cortando bordas se necessário) */
-.modal-image-side.cover img {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
+  object-fit: contain;
 }
 
 .modal-text-side {
@@ -176,17 +177,16 @@
   background: #ffffff;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   text-align: left;
-  overflow-y: auto;
 }
 
-/* Tipografia */
 .modal-title {
   font-size: 2.8rem;
   font-weight: 500;
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   letter-spacing: -1px;
+  /* Degradê Verde para Roxo */
   background: linear-gradient(90deg, #a3e635, #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -194,20 +194,20 @@
 
 .modal-artist {
   font-size: 1.2rem;
-  color: #a3e635;
-  margin: 0 0 25px 0;
+  color: #a3e635; /* Verde limão da imagem */
+  margin: 0 0 20px 0;
   font-weight: 400;
 }
 
 .tag-category-modal {
   align-self: flex-start;
-  background: #ecfccb;
-  color: #65a30d;
+  background: #ecfccb; /* Verde clarinho de fundo */
+  color: #65a30d; /* Texto verde oliva */
   padding: 6px 18px;
   border-radius: 20px;
   font-size: 0.95rem;
   font-weight: 500;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .modal-description-text {
@@ -217,28 +217,10 @@
   font-weight: 300;
 }
 
-/* Responsividade */
+/* RESPONSIVIDADE */
 @media (max-width: 900px) {
-  .modal-noticia {
-    flex-direction: column;
-    max-height: 95vh;
-  }
-  
-  .modal-image-side {
-    height: 40vh;               /* Ajusta altura em mobile */
-    min-height: 300px;
-  }
-  
-  .modal-text-side {
-    padding: 40px 30px;
-  }
-  
-  .modal-title {
-    font-size: 2.2rem;
-  }
-  
-  .close-btn {
-    top: 12px;
-    right: 12px;
-  }
+  .modal-noticia { flex-direction: column; }
+  .modal-image-side { min-height: 300px; height: 40vh; }
+  .modal-text-side { padding: 30px; }
+  .modal-title { font-size: 2.2rem; }
 }
