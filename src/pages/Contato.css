@@ -10,8 +10,7 @@
   
   text-align: center;
   /* Gradiente diagonal de três cores herdado do body */
-  background: linear-gradient(135deg, #ffeb9b 0%, #f7fee7 50%, #faf5ff 100%);
-  
+  background: linear-gradient(135deg, #af68af 0%, #f7fee7 50%, #edffad 100%);
   min-height: calc(100vh - 100px);
   overflow: visible; /* Essencial para o footer aparecer */
   
@@ -42,20 +41,27 @@
 }
 
 .contact-card {
-  background: white;
+  background: rgb(219, 219, 219);
   border-radius: 20px;
   padding: 40px;
   max-width: 800px;
   width: 100%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+
   
   /* --- SOMBRA ATUALIZADA PARA MAIS ESCURA --- */
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); /* Aumentei a opacidade de 0.1 para 0.15 */
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;; /* Aumentei a opacidade de 0.1 para 0.15 */
   /* ------------------------------------------ */
-  
+
   text-align: left;
   box-sizing: border-box;
+ /* --- SOMBRA ATUALIZADA PARA MAIS ESCURA --- */
 }
-
+.contact-card:hover {
+  background-color: #ffffff;
+  transform: scale(1.05);
+}
 .card-header {
   display: flex;
   align-items: center;

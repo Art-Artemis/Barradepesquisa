@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate, Link } from 'react-router-dom';
 import HeaderContato from '../components/HeaderContato';
+import { FaEnvelope, FaKey } from "react-icons/fa"; //importação da biblioteca de icones
 import './Cadastro.css';
 
 const Login = () => {
@@ -86,18 +87,28 @@ const Login = () => {
               {successMsg}
             </div>
           )}
-
+          
           <form onSubmit={handleLogin} className="cadastro-form">
+           <div className="email-wrapper" style={{ position: 'relative' }}> 
+            <FaEnvelope className="input-icon" /> 
             <input
-              type="email"
+              type="email"  // modificações davy: adicionado icones ao email atraves da biblioteca de icones (npm install react-icons)
               placeholder="Seu e-mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              disabled={loading}
+              disabled={loading} 
+              style={{
+                  width: '85%',
+                  paddingLeft: '20px',   // espaço para a chave
+                  paddingRight: '20px',
+                  marginLeft: '35px',
+                }}
             />
+            </div>
 
             <div className="password-wrapper" style={{ position: 'relative' }}>
+               <FaKey className="input-icon" />
               <input
                 type={mostrarSenha ? 'text' : 'password'}
                 placeholder="Sua senha"
@@ -105,7 +116,13 @@ const Login = () => {
                 onChange={(e) => setSenha(e.target.value)}
                 required
                 disabled={loading}
-                style={{ width: '100%', paddingRight: '40px' }}
+                style={{
+                  width: '85%',
+                  paddingLeft: '20px',   // espaço para a chave
+                  paddingRight: '20px',
+                  marginLeft: '35px',
+                }}
+                
               />
               <button
                 type="button"
