@@ -34,12 +34,11 @@ const Cadastro = () => {
 
     setLoading(true);
 
-    // Realiza o cadastro no Auth do Supabase
     const { data, error } = await supabase.auth.signUp({
       email,
       password: senha,
       options: {
-        data: { nome: nome }, // Metadados que o Trigger SQL vai ler
+        data: { nome: nome },
         emailRedirectTo: window.location.origin + '/login',
       },
     });
@@ -53,13 +52,8 @@ const Cadastro = () => {
         setErrorMsg(error.message);
       }
     } else if (data.user) {
-      // IMPORTANTE: Se o e-mail não chegar, lembre-se da dica de desativar "Confirm Email" no painel
-      setSuccessMsg('Cadastro solicitado! Verifique seu e-mail (e a pasta de spam) para confirmar sua conta.');
-      
-      // Limpa campos
+      setSuccessMsg('Cadastro solicitado! Verifique seu e-mail para confirmar sua conta.');
       setNome(''); setEmail(''); setSenha(''); setConfirmaSenha('');
-
-      // Redireciona após um tempo maior para ele ler o aviso
       setTimeout(() => {
         navigate('/login');
       }, 5000);
@@ -82,17 +76,44 @@ const Cadastro = () => {
             <input type="text" placeholder="Seu Nome completo" value={nome} onChange={(e) => setNome(e.target.value)} required disabled={loading} />
             <input type="email" placeholder="Seu melhor e-mail" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={loading} />
 
-            <div style={{ position: 'relative' }}>
-              <input type={mostrarSenha ? 'text' : 'password'} placeholder="Crie uma senha" value={senha} onChange={(e) => setSenha(e.target.value)} required disabled={loading} style={{ width: '100%' }} />
-              <button type="button" onClick={() => setMostrarSenha(!mostrarSenha)} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer' }}>
-                {mostrarSenha ? '🙈' : '👁️'}
+            {/* CAMPO SENHA */}
+            <div style={{ position: 'relative', width: '100%', marginBottom: '15px' }}>
+              <input 
+                type={mostrarSenha ? 'text' : 'password'} 
+                placeholder="Crie uma senha" 
+                value={senha} 
+                onChange={(e) => setSenha(e.target.value)} 
+                required 
+                disabled={loading} 
+                style={{ width: '100%', paddingRight: '40px' }} 
+              />
+              <button 
+                type="button" 
+                onClick={() => setMostrarSenha(!mostrarSenha)} 
+                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', color: '#8b5cf6' }}
+              >
+                {/* ÍCONES DO FONT AWESOME */}
+                <i className={mostrarSenha ? "fas fa-eye-slash" : "fas fa-eye"}></i>
               </button>
             </div>
 
-            <div style={{ position: 'relative' }}>
-              <input type={mostrarConfirmaSenha ? 'text' : 'password'} placeholder="Confirme a senha" value={confirmaSenha} onChange={(e) => setConfirmaSenha(e.target.value)} required disabled={loading} style={{ width: '100%' }} />
-              <button type="button" onClick={() => setMostrarConfirmaSenha(!mostrarConfirmaSenha)} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer' }}>
-                {mostrarConfirmaSenha ? '🙈' : '👁️'}
+            {/* CAMPO CONFIRMAR SENHA */}
+            <div style={{ position: 'relative', width: '100%', marginBottom: '20px' }}>
+              <input 
+                type={mostrarConfirmaSenha ? 'text' : 'password'} 
+                placeholder="Confirme a senha" 
+                value={confirmaSenha} 
+                onChange={(e) => setConfirmaSenha(e.target.value)} 
+                required 
+                disabled={loading} 
+                style={{ width: '100%', paddingRight: '40px' }} 
+              />
+              <button 
+                type="button" 
+                onClick={() => setMostrarConfirmaSenha(!mostrarConfirmaSenha)} 
+                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', color: '#8b5cf6' }}
+              >
+                <i className={mostrarConfirmaSenha ? "fas fa-eye-slash" : "fas fa-eye"}></i>
               </button>
             </div>
 

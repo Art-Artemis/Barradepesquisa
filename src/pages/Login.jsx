@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate, Link } from 'react-router-dom';
 import HeaderContato from '../components/HeaderContato';
-import { FaEnvelope, FaKey } from "react-icons/fa"; //importação da biblioteca de icones
+import { FaEnvelope, FaKey } from "react-icons/fa"; // Manter react-icons para os ícones internos
 import './Cadastro.css';
 
 const Login = () => {
@@ -22,7 +22,6 @@ const Login = () => {
     setLoading(true);
 
     try {
-      // 1. Autenticação no Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password: senha,
@@ -31,13 +30,11 @@ const Login = () => {
       if (authError) throw authError;
 
       if (authData.user) {
-        // 2. Busca o perfil na tabela 'usuario'
-        // Adicionamos um pequeno delay ou retry caso o trigger seja lento (opcional, mas seguro)
         const { data: perfil, error: perfilError } = await supabase
           .from('usuario')
           .select('id_tipo_usuario')
           .eq('id_usuario', authData.user.id)
-          .maybeSingle(); // maybeSingle não quebra se não achar de primeira
+          .maybeSingle();
 
         if (perfilError) throw perfilError;
 
@@ -47,11 +44,9 @@ const Login = () => {
           return;
         }
 
-        // 3. Verificação do ID
         setSuccessMsg('Acesso autorizado! Redirecionando...');
 
         setTimeout(() => {
-          // No banco: 1 = Admin, 2 = Comum
           if (Number(perfil.id_tipo_usuario) === 1) {
             navigate('/admin');
           } else {
@@ -89,26 +84,26 @@ const Login = () => {
           )}
           
           <form onSubmit={handleLogin} className="cadastro-form">
-           <div className="email-wrapper" style={{ position: 'relative' }}> 
-            <FaEnvelope className="input-icon" /> 
-            <input
-              type="email"  // modificações davy: adicionado icones ao email atraves da biblioteca de icones (npm install react-icons)
-              placeholder="Seu e-mail"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={loading} 
-              style={{
+            <div className="email-wrapper" style={{ position: 'relative', marginBottom: '15px' }}> 
+              <FaEnvelope className="input-icon" /> 
+              <input
+                type="email"
+                placeholder="Seu e-mail"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={loading} 
+                style={{
                   width: '85%',
-                  paddingLeft: '20px',   // espaço para a chave
+                  paddingLeft: '20px',
                   paddingRight: '20px',
                   marginLeft: '35px',
                 }}
-            />
+              />
             </div>
 
-            <div className="password-wrapper" style={{ position: 'relative' }}>
-               <FaKey className="input-icon" />
+            <div className="password-wrapper" style={{ position: 'relative', marginBottom: '20px' }}>
+              <FaKey className="input-icon" />
               <input
                 type={mostrarSenha ? 'text' : 'password'}
                 placeholder="Sua senha"
@@ -118,11 +113,10 @@ const Login = () => {
                 disabled={loading}
                 style={{
                   width: '85%',
-                  paddingLeft: '20px',   // espaço para a chave
-                  paddingRight: '20px',
+                  paddingLeft: '20px',
+                  paddingRight: '45px', // Aumentei o espaço para o olho não sobrepor o texto
                   marginLeft: '35px',
                 }}
-                
               />
               <button
                 type="button"
@@ -136,9 +130,13 @@ const Login = () => {
                   border: 'none',
                   cursor: 'pointer',
                   fontSize: '1.1rem',
+                  color: '#8b5cf6', // Roxo do Studio Besouro
+                  display: 'flex',
+                  alignItems: 'center'
                 }}
               >
-                {mostrarSenha ? '🙈' : '👁️'}
+                {/* Substituição dos emojis pelos ícones do Font Awesome */}
+                <i className={mostrarSenha ? "fas fa-eye-slash" : "fas fa-eye"}></i>
               </button>
             </div>
 
