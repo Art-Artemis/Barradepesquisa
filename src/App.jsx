@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
-// 1. Importação dos Componentes de Layout
+// Componentes
 import Header from './components/Header';
 import Footer from './components/Footer';
 
-// 2. Importação das Páginas
+// Páginas
 import Home from './pages/Home';
 import Contato from './pages/Contato'; 
 import Cadastro from './pages/Cadastro'; 
@@ -13,34 +13,34 @@ import Login from './pages/Login';
 import Admin from './pages/Admin';
 import PaginaArtista from './pages/PaginaArtista';
 
-// 3. Estilos
 import './App.css';
 
 function AppContent() {
   const location = useLocation();
   const rotaAtual = location.pathname.toLowerCase().replace(/\/$/, "") || "/";
 
-  // --- LÓGICA DO HEADER ---
-  // Escondemos o Header padrão no Login, Cadastro, Admin, Artista e agora no Contato (pois o Contato tem o seu próprio)
+ 
+  const [pesquisa, setPesquisa] = useState('');
+
   const rotasSemHeader = ['/login', '/cadastro', '/admin', '/contato'];
   const isArtista = rotaAtual.startsWith('/artista');
-  
   const esconderHeader = rotasSemHeader.includes(rotaAtual) || isArtista;
 
-  // --- LÓGICA DO FOOTER ---
-  // Aqui deixamos o Footer aparecer em quase tudo. 
-  // Ele só vai sumir no Admin ou se você estiver na página de um Artista.
   const rotasSemFooter = ['/admin']; 
   const esconderFooter = rotasSemFooter.includes(rotaAtual) || isArtista;
 
   return (
     <div id="root">
-      {/* Header condicional */}
-      {!esconderHeader && <Header />}
+      {/* Header com pesquisa */}
+      {!esconderHeader && (
+        <Header setPesquisa={setPesquisa} />
+      )}
 
       <div className="main-content-wrapper">
         <Routes>
-          <Route path="/" element={<Home />} />
+          {/* 👇 PASSANDO pesquisa pra Home */}
+          <Route path="/" element={<Home pesquisa={pesquisa} />} />
+
           <Route path="/contato" element={<Contato />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/login" element={<Login />} />
@@ -49,7 +49,6 @@ function AppContent() {
         </Routes>
       </div>
       
-      {/* Footer condicional (Agora visível no Contato/Home/Login/Cadastro) */}
       {!esconderFooter && <Footer />}
     </div>
   );

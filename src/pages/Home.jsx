@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import Banner from '../components/Banner';
-import HomeObras from './HomeObras'; // ← novo componente
+import HomeObras from './HomeObras';
 import './Home.css';
 
-const Home = () => {
+const Home = ({ pesquisa }) => {
   const [banners, setBanners] = useState([]);
 
   useEffect(() => {
@@ -36,9 +36,8 @@ const Home = () => {
       </section>
 
       {/* 2. Conteúdo principal: obras */}
-      <HomeObras />
+      <HomeObras pesquisa={pesquisa} />
 
-      {/* Footer ou outros elementos se precisar */}
     </div>
   );
 };

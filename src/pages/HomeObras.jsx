@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import './HomeObras.css';
 
-const HomeObras = () => {
+const HomeObras = ({ pesquisa }) => {
   const [obras, setObras] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categoriaAtiva, setCategoriaAtiva] = useState('Todas');
@@ -46,9 +46,18 @@ const HomeObras = () => {
     fetchObras();
   }, []);
 
-  const obrasFiltradas = categoriaAtiva === 'Todas'
-    ? obras
-    : obras.filter(obra => obra.categoria === categoriaAtiva);
+  const textoBusca = (pesquisa || '').toLowerCase();
+
+  const obrasFiltradas = obras.filter(obra => {
+    const matchCategoria =
+      categoriaAtiva === 'Todas' || obra.categoria === categoriaAtiva;
+
+    const matchPesquisa =
+      obra.titulo.toLowerCase().includes(textoBusca) ||
+      obra.artista.toLowerCase().includes(textoBusca);
+
+    return matchCategoria && matchPesquisa;
+  });
 
   if (loading) return <div className="loading">Carregando...</div>;
 
@@ -70,13 +79,21 @@ const HomeObras = () => {
 
       <div className="obras-grid">
         {obrasFiltradas.map(obra => (
-          <div key={obra.id} className="obra-card" onClick={() => setObraSelecionada(obra)}>
+          <div
+            key={obra.id}
+            className="obra-card"
+            onClick={() => setObraSelecionada(obra)}
+          >
             <div className="obra-imagem">
               <img src={obra.imagem} alt={obra.titulo} />
             </div>
             <div className="obra-info">
-              <h3 className="obra-titulo" style={{fontSize: '1.2rem', fontWeight: '700'}}>{obra.titulo}</h3>
-              <p className="obra-artista" style={{fontSize: '0.9rem'}}>por {obra.artista}</p>
+              <h3 className="obra-titulo" style={{ fontSize: '1.2rem', fontWeight: '700' }}>
+                {obra.titulo}
+              </h3>
+              <p className="obra-artista" style={{ fontSize: '0.9rem' }}>
+                por {obra.artista}
+              </p>
             </div>
           </div>
         ))}
@@ -86,16 +103,18 @@ const HomeObras = () => {
         <div className="modal-overlay" onClick={() => setObraSelecionada(null)}>
           <div className="modal-noticia" onClick={e => e.stopPropagation()}>
             <button className="close-btn" onClick={() => setObraSelecionada(null)}>✕</button>
-            
+
             <div className="modal-inner-content">
               <div className="modal-image-side">
                 <img src={obraSelecionada.imagem} alt={obraSelecionada.titulo} />
               </div>
-              
+
               <div className="modal-text-side">
                 <h1 className="modal-title">{obraSelecionada.titulo}</h1>
                 <p className="modal-artist">por {obraSelecionada.artista}</p>
-                <span className="tag-category-modal">{obraSelecionada.categoria.toLowerCase()}</span>
+                <span className="tag-category-modal">
+                  {obraSelecionada.categoria.toLowerCase()}
+                </span>
                 <div className="modal-description-text">
                   <p>{obraSelecionada.descricao}</p>
                 </div>
